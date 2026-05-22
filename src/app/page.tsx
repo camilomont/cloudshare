@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import Hero from "@/components/Hero";
 import FilterTabs from "@/components/FilterTabs";
 import MasonryGrid from "@/components/MasonryGrid";
 import { Project } from "@/lib/types";
+import { getMockForId } from "@/lib/mocks";
 
 async function getProjects(): Promise<Project[]> {
   const res = await fetch(
@@ -24,7 +26,9 @@ async function getProjects(): Promise<Project[]> {
   return projects;
 }
 
-export default async function HomePage() {
+export default async function HomePage(props: {
+  searchParams: Promise<{ category?: string }>;
+}) {
   let projects: Project[] = [];
   let error = "";
 
@@ -34,11 +38,19 @@ export default async function HomePage() {
     error = err instanceof Error ? err.message : "Error desconocido";
   }
 
+  const searchParams = await props.searchParams;
+  const category = searchParams.category;
+  const filteredProjects = category
+    ? projects.filter((p) => getMockForId(p.projectId).category === category)
+    : projects;
+
   return (
     <>
       <Hero />
       <section className="bg-[#111111]">
-        <FilterTabs />
+        <Suspense fallback={null}>
+          <FilterTabs />
+        </Suspense>
 
         <div className="mx-auto max-w-7xl px-6 pb-16">
           {error && (
@@ -47,10 +59,14 @@ export default async function HomePage() {
             </div>
           )}
 
-          <MasonryGrid projects={projects} />
+          <MasonryGrid projects={filteredProjects} />
 
-          {!error && projects.length === 0 && (
-            <p className="py-20 text-center text-[#666666]">Aún no hay proyectos publicados.</p>
+          {!error && filteredProjects.length === 0 && (
+            <p className="py-20 text-center text-[#666666]">
+              {category
+                ? `No hay proyectos en la categoría "${category}".`
+                : "Aún no hay proyectos publicados."}
+            </p>
           )}
         </div>
       </section>

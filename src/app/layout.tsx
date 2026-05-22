@@ -20,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="min-h-full flex flex-col bg-[#111111] text-white">
+      <body
+        className="min-h-full flex flex-col bg-[#111111] text-white"
+        suppressHydrationWarning
+      >
         <header className="sticky top-0 z-50 border-b border-[#222222] bg-[#111111]/80 backdrop-blur">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
             <a href="/" className="text-lg font-bold tracking-tight text-white">

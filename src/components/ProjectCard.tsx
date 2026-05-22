@@ -13,14 +13,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const mock = getMockForId(project.projectId);
 
   return (
-    <article className="group relative mb-6 break-inside-avoid overflow-hidden rounded-2xl border border-[#222222] bg-[#1a1a1a] transition-transform duration-300 hover:-translate-y-1">
-      <div className="relative w-full overflow-hidden">
+    <article className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#222222] bg-[#1a1a1a] transition-transform duration-300 hover:-translate-y-1 h-full">
+      <div className="relative w-full overflow-hidden aspect-[4/3]">
         <Image
           src={project.imageUrl}
           alt={project.title}
-          width={600}
-          height={400}
-          className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
           unoptimized
         />
 
@@ -43,7 +42,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="flex flex-1 flex-col p-4">
         <div className="flex items-center gap-2">
           <Image
             src={mock.avatar}
@@ -60,7 +59,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </div>
 
         <h3 className="mt-3 text-sm font-semibold text-white truncate">{project.title}</h3>
-        <p className="mt-1 text-xs text-[#a3a3a3] line-clamp-2">{project.description}</p>
+        <p className="mt-1 text-xs text-[#a3a3a3] line-clamp-2 flex-1">{project.description}</p>
 
         <div className="mt-3 flex items-center justify-between">
           <span className="text-sm font-bold text-white">

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import {
   Flame,
   Palette,
@@ -21,16 +22,41 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 export default function FilterTabs() {
-  const [active, setActive] = useState(CATEGORIES[0]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const activeCategory = searchParams.get("category");
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+      return params.toString();
+    },
+    [searchParams]
+  );
 
   return (
     <div className="flex items-center justify-center gap-2 overflow-x-auto px-6 py-4 pb-8 [scrollbar-width:none]">
       {CATEGORIES.map((cat) => {
-        const isActive = cat === active;
+        const isActive = activeCategory === cat;
         return (
           <button
             key={cat}
-            onClick={() => setActive(cat)}
+            onClick={() => {
+              if (isActive) {
+                router.push(pathname + "?" + createQueryString("category", ""));
+              } else {
+                router.push(
+                  pathname + "?" + createQueryString("category", cat)
+                );
+              }
+            }}
             className={`flex shrink-0 items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-all ${
               isActive
                 ? "bg-white text-black shadow-md"
