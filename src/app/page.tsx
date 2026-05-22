@@ -4,14 +4,12 @@ import FilterTabs from "@/components/FilterTabs";
 import MasonryGrid from "@/components/MasonryGrid";
 import { Project } from "@/lib/types";
 import { getMockForId } from "@/lib/mocks";
+import { buildApiUrl } from "@/lib/api";
 
 async function getProjects(): Promise<Project[]> {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_BASE_URL}/projects`,
-    {
-      cache: "no-store",
-    }
-  );
+  const res = await fetch(buildApiUrl("/projects"), {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("No se pudieron cargar los proyectos.");

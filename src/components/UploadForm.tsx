@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent, ChangeEvent } from "react";
+import { buildApiUrl } from "@/lib/api";
 
 export default function UploadForm() {
   const [title, setTitle] = useState("");
@@ -43,13 +44,10 @@ export default function UploadForm() {
     formData.append("image", file);
 
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/projects`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(buildApiUrl("/projects"), {
+        method: "POST",
+        body: formData,
+      });
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
